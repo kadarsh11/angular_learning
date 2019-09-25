@@ -9,6 +9,7 @@ import { FormlyMaterialModule } from '@ngx-formly/material';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { FormlyBootstrapModule } from '@ngx-formly/bootstrap'
 @NgModule({
   declarations: [
     AppComponent
@@ -18,12 +19,9 @@ import { MatCardModule } from '@angular/material/card';
     BrowserAnimationsModule,
     ReactiveFormsModule,
     MatStepperModule,
-    FormlyMaterialModule,
-    FormlyModule.forRoot({
-      validationMessages: [
-        { name: 'required', message: 'This field is required' },
-      ],
-    }),
+    FormlyMaterialModule, // USE THIS FOR MATERIAL LINK and compment FormlyBootstrapModule
+    // FormlyBootstrapModule, // USE THIS FOR BOOTSTRAP UI and compment FormlyBootstrapModule
+    FormlyModule.forRoot(),
     MatButtonModule,
     MatCardModule
   ],

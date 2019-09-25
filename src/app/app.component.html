@@ -7,11 +7,12 @@
         </formly-form>
 
         <div>
-          <button *ngIf="index !== 0" class="btn btn-primary" matStepperPrevious type="button"
+          <button mat-raised-button *ngIf="index !== 0" class="btn btn-primary" matStepperPrevious type="button"
             (click)="prevStep(index)">Back</button>
-          <button mat-raised-button class="btn btn-primary" *ngIf="!last" matStepperNext class="btn btn-primary"
-            type="button" [disabled]="!form.at(index).valid" (click)="nextStep(index)">Next</button>
-          <button *ngIf="last" class="btn btn-primary" [disabled]="!form.valid" type="submit">Submit</button>
+          <button mat-raised-button *ngIf="!last" matStepperNext class="btn btn-primary" type="button"
+            [disabled]="!form.at(index).valid" (click)="nextStep(index)">Next</button>
+          <button mat-raised-button *ngIf="last" class="btn btn-primary" [disabled]="!form.valid"
+            type="submit">Submit</button>
         </div>
       </mat-step>
     </mat-horizontal-stepper>
