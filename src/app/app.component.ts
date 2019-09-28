@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
+import { QUESTIONS } from '../mock-question';
+
 export interface StepType {
   label: string;
   fields: FormlyFieldConfig[];
@@ -17,23 +19,7 @@ export class AppComponent {
   date = 'Adarsh';
   index: number = 1;
   labelPosition = ""
-  questions = [
-    {
-      step: 1,
-      question: "The International Literacy Day is observed on",
-      option: ["Sep 8", "Nov 28", "May 2"]
-    },
-    {
-      step: 1,
-      question: "The language of Lakshadweep. a Union Territory of India, is",
-      option: ["Tamil", "Hindi", "Malayalam"]
-    },
-    {
-      step: 3,
-      question: "Which day is observed as the World Standards  Day?",
-      option: ["June 26", "Nov 15", "Dec 2"]
-    },
-  ];
+  questions = QUESTIONS;
   activedStep = 0;
   fields = []
   // steps = []
@@ -69,52 +55,65 @@ export class AppComponent {
     }
   ];
   ngOnInit(): void {
-    let allSteps = []
-    // BELOW given loop is to find a array of different step
-    for (let i = 0; i < this.questions.length; i++) {
-      if (!allSteps.includes(this.questions[i].step)) {
-        allSteps.push(this.questions[i].step)
+    let newForm:StepType[] = []
+    this.questions.forEach((question,index) => {
+      let formField=this.createFormField(question,index)
+      if(formField!=null && index<3){
+        console.log(`My index is ${index} ${formField}`)
+        newForm.push(formField)
       }
-    }
+      
+    });
+    this.steps=newForm
+    console.log(this.steps)
+  }
 
-    console.log("Array of unique step", allSteps)
-
-    // After getting all unique step we divide question per page 
-    // For Example:
-    //   this.questions contain to qunique step [1,3]
-    //   So your first page will contain all the question of step 1
-    //   and your second page will contain all the question of step 3 
-    for (let i = 0; i < allSteps.length; i++) {
-      let pageForm = []
-      for (let j = 0; j < this.questions.length; j++) {
-        if (allSteps[i] == this.questions[j].step) {
-          let options = [];
-          for (let k = 0; k < this.questions[j].option.length; k++) {
-            options.push({
-              key: this.questions[j].option[k],
-              value: this.questions[j].option[k]
-            });
-          }
-          let field = {
-            key: `${j}`,
-            type: 'radio',
-            templateOptions: {
-              label: this.questions[j].question,
-              options: options,
-              required: true
-            }
-          }
-          pageForm.push(field)
+  createFormField(question,key): StepType {
+    let form: StepType;
+    let formField:FormlyFieldConfig;
+    switch (question.type) {
+      case "radio":
+      formField={
+        key: `${key}`,
+        type:'radio',
+        templateOptions:{
+          label:question.question,
+          required:true,
+          options: question.options.map((option)=>{
+              let keyValuePair={
+                key:option,
+                value:option
+              }
+              return keyValuePair;
+          })
         }
       }
-      let o: StepType = {
-        label: `${i + 1}`,
-        fields: pageForm
-      }
-      this.t.push(o)
+      console.log(`\n\n ${formField} \n\n`)
+        form = {
+          label: '',
+          fields: [formField]
+        }
+        break;
+        // case "input":
+        // form ={
+        //   label:'',
+        //   fields:[
+        //     {
+        //       key: `${key}`,
+        //       type: 'input',
+        //       templateOptions: {
+        //         label: 'Email address',
+        //         placeholder: 'Enter email',
+        //         required: true,
+        //       }
+        //     }
+        //   ]
+        // }
+        // break;
+        default : form=null
+        break;
     }
-    this.steps = this.t
-    console.log("GOT THE NEW ARRAY for the forms on each page--------", this.steps)
+    return form
   }
 
 
