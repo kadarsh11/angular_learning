@@ -1,6 +1,6 @@
 <mat-card class="form-card">
   <form [formGroup]="form" (ngSubmit)="submit()">
-    <mat-horizontal-stepper [linear]="true">
+    <mat-horizontal-stepper [linear]="true" #stepper>
       <mat-step *ngFor="let step of steps; let index = index; let last = last;">
         <ng-template matStepLabel>{{ step.label }}</ng-template>
         <formly-form [form]="form.at(index)" [model]="model" [fields]="step.fields" [options]="options[index]">
@@ -9,8 +9,8 @@
         <div>
           <button mat-raised-button *ngIf="index !== 0" class="btn btn-primary" matStepperPrevious type="button"
             (click)="prevStep(index)">Back</button>
-          <button mat-raised-button *ngIf="!last" matStepperNext class="btn btn-primary" type="button"
-            [disabled]="!form.at(index).valid" (click)="nextStep(index)">Next</button>
+          <button mat-raised-button *ngIf="!last" class="btn btn-primary" type="button"
+            (click)="nextStep(index,stepper)">Next</button>
           <button mat-raised-button *ngIf="last" class="btn btn-primary" [disabled]="!form.valid"
             type="submit">Submit</button>
         </div>
