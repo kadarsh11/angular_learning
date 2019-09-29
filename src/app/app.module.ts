@@ -10,6 +10,8 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { FormlyBootstrapModule } from '@ngx-formly/bootstrap'
+import { HttpClientModule } from '@angular/common/http'
+import { QuestionService} from './question.service';
 @NgModule({
   declarations: [
     AppComponent
@@ -17,6 +19,7 @@ import { FormlyBootstrapModule } from '@ngx-formly/bootstrap'
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     ReactiveFormsModule,
     MatStepperModule,
     FormlyMaterialModule, // USE THIS FOR MATERIAL LINK and compment FormlyBootstrapModule
@@ -28,4 +31,4 @@ import { FormlyBootstrapModule } from '@ngx-formly/bootstrap'
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {QuestionService}
