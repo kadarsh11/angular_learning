@@ -1,6 +1,6 @@
 <mat-card class="form-card">
   <form [formGroup]="form" (ngSubmit)="submitBtn()">
-    <mat-horizontal-stepper [linear]="false" #stepper>
+    <mat-horizontal-stepper [linear]="true" #stepper>
       <mat-step *ngFor="let step of steps; let index = index; let last = last;">
         <ng-template matStepLabel>{{ step.label }}</ng-template>
         <formly-form [form]="form.at(index)" [model]="model" [fields]="step.fields" [options]="options[index]">
