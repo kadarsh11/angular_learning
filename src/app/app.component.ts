@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormGroup, FormControl, ValidationErrors } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 import { QUESTIONS } from '../mock-question';
 import { from } from 'rxjs';
@@ -17,14 +17,11 @@ export interface StepType {
 
 export class AppComponent {
   title = 'multistep-form';
-  date = 'Adarsh';
   index: number = 1;
   labelPosition = ""
   questions = QUESTIONS;
   activedStep = 0;
   fields = []
-  // steps = []
-
 
   t: StepType[] = []
   model = {};
@@ -105,24 +102,52 @@ export class AppComponent {
             label: 'Email address',
             placeholder: 'Enter email',
             required: true,
+          },
+          validators: {
+            email: {
+              expression: (email) => {
+                if (email.value != null && typeof email.value == "string") {
+                  let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                  return re.test(String(email.value).toLowerCase())
+                } else {
+                  return false
+                }
+              },
+              message: (error, field: FormlyFieldConfig) => `"${field.formControl.value}" is not a valid Email Address`,
+            },
           }
         },
         {
-          key: `company`,
+          key: `contact_number`,
           type: 'input',
           templateOptions: {
-            label: 'Enter company details',
-            placeholder: 'Enter email',
+            type: 'number',
+            label: 'Contact Number',
+            placeholder: 'Enter Contact Number',
             required: true,
+            minLength: 10,
+            maxLength: 10
           }
         },
         {
-          key: `phoolan`,
+          key: `company_name`,
           type: 'input',
           templateOptions: {
-            label: 'Phoolan, Ek Kauf ka naam ',
-            placeholder: 'Phoolan, Ek Kauf ka naam ',
+            label: 'Company Name',
+            placeholder: 'Enter Company name',
             required: true,
+          },
+          validators: {
+            company_name: {
+              expression: (company_name) => {
+                if (company_name.value != null && typeof company_name.value == "string") {
+                  return company_name.value.length > 0
+                } else {
+                  return false
+                }
+              },
+              message: (error, field: FormlyFieldConfig) => `Please Enter Company Name`,
+            },
           }
         }
       ]
@@ -139,17 +164,17 @@ export class AppComponent {
   }
 
   nextStep(step, stepper) {
-    if (this.model[this.activedStep] == null) {
-      alert("Phoolan kah rahi hai data daal")
-    }
-    else {
-      this.activedStep = step + 1;
-      stepper.next();
-    }
+    // if (this.model[this.activedStep] == null) {
+    //   alert("Please enter the data")
+    // }
+    // else {
+    // }
+    this.activedStep = step + 1;
+    stepper.next();
   }
 
-  submit() {
-    alert(JSON.stringify(this.model));
+  submit(form) {
+    console.log(form.valid);
     let answered = []
     for (let i = 0; i < this.questions.length; i++) {
       let qa = { ...this.questions[i], answer: this.model[`${i}`] }
