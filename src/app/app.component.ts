@@ -22,10 +22,9 @@ export class AppComponent {
   questions = QUESTIONS;
   activedStep = 0;
   fields = []
-
   t: StepType[] = []
   model = {};
-
+  regExEmailValid = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   steps: StepType[] = [];
 
@@ -107,8 +106,7 @@ export class AppComponent {
             email: {
               expression: (email) => {
                 if (email.value != null && typeof email.value == "string") {
-                  let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                  return re.test(String(email.value).toLowerCase())
+                  return this.regExEmailValid.test(String(email.value).toLowerCase())
                 } else {
                   return false
                 }
@@ -164,22 +162,30 @@ export class AppComponent {
   }
 
   nextStep(step, stepper) {
-    // if (this.model[this.activedStep] == null) {
-    //   alert("Please enter the data")
-    // }
-    // else {
-    // }
-    this.activedStep = step + 1;
-    stepper.next();
+    if (this.model[this.activedStep] == null) {
+      alert("Please enter the data")
+    }
+    else {
+      this.activedStep = step + 1;
+      stepper.next();
+    }
   }
 
-  submit(form) {
-    console.log(form.valid);
+  submitBtn() {
+    let isEmailValid = this.regExEmailValid.test(String(this.model['email']).toLowerCase())
+    if (this.model['company_name'] && this.model['contact_number'] && isEmailValid) {
+      this.submitForm();
+    } else {
+      console.log("EVERTHING IS NOT VALID")
+    }
+  }
+
+  submitForm() {
     let answered = []
     for (let i = 0; i < this.questions.length; i++) {
       let qa = { ...this.questions[i], answer: this.model[`${i}`] }
       answered.push(qa)
     }
-    console.log("------ANSWER ARRAY ----------", answered)
+    console.log(answered)
   }
 }

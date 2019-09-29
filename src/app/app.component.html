@@ -1,5 +1,5 @@
 <mat-card class="form-card">
-  <form [formGroup]="form" (ngSubmit)="submit(form.at(index))">
+  <form [formGroup]="form" (ngSubmit)="submitBtn()">
     <mat-horizontal-stepper [linear]="false" #stepper>
       <mat-step *ngFor="let step of steps; let index = index; let last = last;">
         <ng-template matStepLabel>{{ step.label }}</ng-template>
