@@ -10,10 +10,11 @@ export class QuestionService {
 
   constructor(private http: HttpClient) { }
 
-  submit(answered) {
+  submit(answered,details) {
     let t =Object.assign({}, answered)
     const obj = {
-      answered:t
+      answered:t,
+      details:details
     };
     console.log(obj);
     this.http.post(`${this.uri}/add`, obj)
